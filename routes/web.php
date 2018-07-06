@@ -16,3 +16,5 @@ Route::get('/', function () {
 });
 
 Route::get('/weather', 'WeatherController@index')->name('weather.index');
+//Route::get('/order', '')->name('order.index');
+Route::resource('order', 'OrderController');
