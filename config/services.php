@@ -35,4 +35,10 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'weather' => [
+        'yandex' => [
+            'key' => env('YANDEX_WEATHER_API_KEY', ''),
+        ]
+    ]
+
 ];
