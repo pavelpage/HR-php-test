@@ -77,4 +77,9 @@ class Order extends Model
             ->where('delivery_dt', '>', $date)
             ->whereRaw('delivery_dt < NOW()');
     }
+
+    public function isCompleted()
+    {
+        return $this->status == 20;
+    }
 }

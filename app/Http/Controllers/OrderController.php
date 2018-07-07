@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\CompletedOrder;
 use App\Order;
 use App\Partner;
 use Illuminate\Http\Request;
+use Notification;
 
 class OrderController extends Controller
 {
@@ -117,6 +119,7 @@ class OrderController extends Controller
     public function edit(Order $order)
     {
         //
+        $order->load(['items.product']);
 
         return view('orders.edit', [
             'pageTitle' => 'Редактировать заказ',
@@ -145,6 +148,16 @@ class OrderController extends Controller
 
 
         $order->update($dataSave['order']);
+
+        if ($order->isCompleted()) {
+            $order->load(['items.product.vendor', 'partner']);
+
+            $vendorEmails = $order->items->groupBy('product.vendor.email')->keys()->toArray();
+            $users = array_merge([$order->partner->email], $vendorEmails);
+
+            Notification::route('mail', $users)
+                ->notify(new CompletedOrder($order));
+        }
 
         return redirect(route('order.edit', $order->id))->with([
             'server_message' => 'Запись обновлена'
