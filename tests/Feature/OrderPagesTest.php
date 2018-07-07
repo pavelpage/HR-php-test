@@ -85,4 +85,14 @@ class OrderPagesTest extends TestCase
         ]);
     }
 
+    public function test_grouped_order_list_tabs_are_available()
+    {
+        factory(Order::class, 10)->create();
+
+        $this->get(route('order.grouped'))->assertStatus(200);
+        $this->get(route('order.current'))->assertStatus(200);
+        $this->get(route('order.new'))->assertStatus(200);
+        $this->get(route('order.completed'))->assertStatus(200);
+    }
+
 }

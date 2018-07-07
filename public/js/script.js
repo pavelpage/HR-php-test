@@ -18,3 +18,18 @@ $(function () {
         });
     });
 });
+
+$(function () {
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+
+        var tab = $(e.target);
+        var url = tab.data('url');
+        var tabContent = $(tab.attr('href'));
+
+        if (tabContent.find('.loading-indicator').length > 0) {
+            $.get(url,{}, function (response) {
+                tabContent.html(response);
+            });
+        }
+    })
+});

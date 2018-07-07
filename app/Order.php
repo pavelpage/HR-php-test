@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -45,5 +46,35 @@ class Order extends Model
     public function productsString()
     {
         return $this->products->implode('name', ', ');
+    }
+
+    public function scopeOverdue($query)
+    {
+        return $query->where('status', 10)
+            ->whereRaw('delivery_dt < NOW()');
+    }
+
+    public function scopeCurrent($query)
+    {
+        $date = Carbon::now()->addHours(24)->format('Y-m-d H:i:s');
+
+        return $query->where('status', 10)
+                ->where('delivery_dt', '<', $date)
+                ->whereRaw('delivery_dt > NOW()');
+    }
+
+    public function scopeNew($query)
+    {
+        return $query->where('status', 0)
+            ->whereRaw('delivery_dt > NOW()');
+    }
+
+    public function scopeCompleted($query)
+    {
+        $date = Carbon::now()->subHours(24)->format('Y-m-d H:i:s');
+
+        return $query->where('status', 20)
+            ->where('delivery_dt', '>', $date)
+            ->whereRaw('delivery_dt < NOW()');
     }
 }

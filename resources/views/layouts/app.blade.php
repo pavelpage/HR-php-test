@@ -14,7 +14,7 @@
     <link href="{{asset('/css/app.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('/css/style.css')}}" rel="stylesheet" type="text/css">
     <script src="{{asset('/js/app.js')}}"></script>
-    <script src="{{asset('/js/script.js')}}"></script>
+    <script src="{{asset('/js/script.js')}}?{{time()}}"></script>
 </head>
 <body>
 

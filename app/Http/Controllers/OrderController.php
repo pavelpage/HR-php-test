@@ -24,6 +24,58 @@ class OrderController extends Controller
         ]);
     }
 
+    public function groupedList()
+    {
+        $overdueOrders = Order::with(['partner', 'items', 'products'])
+                                    ->overdue()
+                                    ->orderBy('delivery_dt', 'desc')
+                                    ->limit(50)
+                                    ->get();
+
+        return view('orders.grouped', [
+            'pageTitle' => 'Список заказов',
+            'overdueOrders' => $overdueOrders
+        ]);
+    }
+
+    public function currentOrders()
+    {
+        $currentOrders = Order::with(['partner', 'items', 'products'])
+            ->current()
+            ->orderBy('delivery_dt', 'ASC')
+            ->get();
+
+        return view('orders.list', [
+            'orders' => $currentOrders
+        ]);
+    }
+
+    public function newOrders()
+    {
+        $newOrders = Order::with(['partner', 'items', 'products'])
+            ->new()
+            ->orderBy('delivery_dt', 'ASC')
+            ->limit(50)
+            ->get();
+
+        return view('orders.list', [
+            'orders' => $newOrders
+        ]);
+    }
+
+    public function completedOrders()
+    {
+        $completedOrders = Order::with(['partner', 'items', 'products'])
+            ->completed()
+            ->orderBy('delivery_dt', 'DESC')
+            ->limit(50)
+            ->get();
+
+        return view('orders.list', [
+            'orders' => $completedOrders
+        ]);
+    }
+    
     /**
      * Show the form for creating a new resource.
      *
